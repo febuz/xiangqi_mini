@@ -1,0 +1,54 @@
+<!-- index.wxml -->
+<view class="container">
+  <view class="header">
+    <text class="title">Xiangqi (Chinese Chess)</text>
+  </view>
+  
+  <view class="game-info">
+    <text class="current-player">Current Player: {{currentPlayer}}</text>
+    <text class="game-status" wx:if="{{gameStatus}}">{{gameStatus}}</text>
+    <view class="multiplayer-info" wx:if="{{isMultiplayer}}">
+      <text>Game ID: {{gameId}}</text>
+      <text>You are playing as: {{playerColor}}</text>
+      <text>{{opponentStatus}}</text>
+    </view>
+  </view>
+  
+  <view class="game-controls">
+    <button bindtap="newGame" type="primary">New Game</button>
+    <button bindtap="showAIOptions" type="default">Play vs AI</button>
+    <button bindtap="goToLobby" type="default">Multiplayer</button>
+  </view>
+  
+  <!-- AI Options Modal -->
+  <view class="modal" wx:if="{{showAIModal}}">
+    <view class="modal-content">
+      <view class="modal-header">
+        <text class="modal-title">AI Game Options</text>
+        <text class="modal-close" bindtap="hideAIOptions">×</text>
+      </view>
+      <view class="option-group">
+        <text class="option-label">AI Difficulty:</text>
+        <picker bindchange="setAIDifficulty" value="{{aiDifficultyIndex}}" range="{{aiDifficultyOptions}}">
+          <view class="picker">
+            {{aiDifficultyOptions[aiDifficultyIndex]}}
+          </view>
+        </picker>
+      </view>
+      <view class="option-group">
+        <text class="option-label">Play as:</text>
+        <picker bindchange="setPlayerColor" value="{{playerColorIndex}}" range="{{playerColorOptions}}">
+          <view class="picker">
+            {{playerColorOptions[playerColorIndex]}}
+          </view>
+        </picker>
+      </view>
+      <button bindtap="startAIGame" type="primary" class="action-btn">Start Game</button>
+    </view>
+  </view>
+  
+  <!-- Game Board -->
+  <view class="board-container">
+    <canvas canvas-id="boardCanvas" class="board" bindtouchstart="onBoardTouch"></canvas>
+  </view>
+</view>

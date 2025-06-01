@@ -1,0 +1,143 @@
+/* index.wxss */
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20rpx;
+  box-sizing: border-box;
+}
+
+.header {
+  width: 100%;
+  text-align: center;
+  margin-bottom: 20rpx;
+}
+
+.title {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.game-info {
+  width: 100%;
+  text-align: center;
+  margin: 20rpx 0;
+  padding: 20rpx;
+  background-color: #f9f9f9;
+  border-radius: 10rpx;
+}
+
+.current-player {
+  font-size: 30rpx;
+  display: block;
+  margin-bottom: 10rpx;
+}
+
+.game-status {
+  font-size: 30rpx;
+  color: #e53935;
+  display: block;
+  margin-bottom: 10rpx;
+}
+
+.multiplayer-info {
+  margin-top: 20rpx;
+  padding-top: 20rpx;
+  border-top: 1px solid #eee;
+}
+
+.multiplayer-info text {
+  display: block;
+  font-size: 28rpx;
+  margin-bottom: 10rpx;
+}
+
+.game-controls {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin: 20rpx 0;
+}
+
+.game-controls button {
+  margin: 0 10rpx;
+  font-size: 28rpx;
+}
+
+.board-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 20rpx;
+}
+
+.board {
+  width: 700rpx;
+  height: 780rpx;
+  background-color: #e8c887;
+  border: 4rpx solid #333;
+  box-shadow: 0 8rpx 16rpx rgba(0, 0, 0, 0.2);
+}
+
+/* Modal styles */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  width: 600rpx;
+  background-color: #fff;
+  border-radius: 10rpx;
+  padding: 30rpx;
+  box-shadow: 0 8rpx 16rpx rgba(0, 0, 0, 0.2);
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30rpx;
+}
+
+.modal-title {
+  font-size: 34rpx;
+  font-weight: bold;
+}
+
+.modal-close {
+  font-size: 40rpx;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.option-group {
+  margin: 30rpx 0;
+}
+
+.option-label {
+  display: block;
+  margin-bottom: 10rpx;
+  font-size: 30rpx;
+}
+
+.picker {
+  padding: 16rpx;
+  background-color: #f5f5f5;
+  border-radius: 8rpx;
+  border: 1px solid #ddd;
+}
+
+.action-btn {
+  width: 100%;
+  margin-top: 30rpx;
+}

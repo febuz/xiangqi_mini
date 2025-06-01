@@ -1,0 +1,11 @@
+{
+  "name": "createMultiplayerGame",
+  "version": 1,
+  "triggers": {
+    "invoke": {
+      "type": "https",
+      "timeout": 60
+    }
+  },
+  "runtime": "nodejs16"
+}

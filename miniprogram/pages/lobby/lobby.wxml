@@ -1,0 +1,37 @@
+<!-- lobby.wxml -->
+<view class="container">
+  <view class="header">
+    <text class="title">Xiangqi Multiplayer Lobby</text>
+  </view>
+  
+  <view class="lobby-content">
+    <view class="game-modes">
+      <text class="section-title">Game Modes</text>
+      <view class="mode-buttons">
+        <button bindtap="createGame" type="primary" class="mode-btn">Create Game</button>
+        <button bindtap="goBack" type="default" class="mode-btn">Back to Menu</button>
+      </view>
+    </view>
+    
+    <view class="active-games" wx:if="{{activeGames.length > 0}}">
+      <text class="section-title">Available Games</text>
+      <view class="games-list">
+        <view class="game-item" wx:for="{{activeGames}}" wx:key="id">
+          <view class="game-info">
+            <text class="game-id">Game ID: {{item.id}}</text>
+            <text class="game-status">Status: {{item.status}}</text>
+          </view>
+          <button bindtap="joinGame" data-game-id="{{item.id}}" type="primary" class="join-btn">Join</button>
+        </view>
+      </view>
+    </view>
+    
+    <view class="no-games" wx:else>
+      <text class="empty-message">No active games available. Create a new game to start playing!</text>
+    </view>
+    
+    <view class="error-message" wx:if="{{errorMessage}}">
+      <text>{{errorMessage}}</text>
+    </view>
+  </view>
+</view>
