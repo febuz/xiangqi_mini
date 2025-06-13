@@ -26,8 +26,10 @@ Page({
     // Get system info to set board size
     const systemInfo = wx.getSystemInfoSync();
     const boardWidth = systemInfo.windowWidth * 0.9;
-    const boardHeight = boardWidth * 10/9; // Maintain 9:10 ratio for Xiangqi board
-    const cellSize = boardWidth / 9;
+    // Maintain 9:10 ratio for Xiangqi board
+    // We need 8 cells horizontally and 9 cells vertically for intersections
+    const boardHeight = boardWidth * 9/8; 
+    const cellSize = boardWidth / 8;
     
     this.setData({
       boardSize: {width: boardWidth, height: boardHeight},
@@ -66,7 +68,7 @@ Page({
     ctx.setLineWidth(1);
     ctx.setStrokeStyle('#000');
     
-    // Draw horizontal lines
+    // Draw horizontal lines (9 lines for 8 cells)
     for (let i = 0; i < 10; i++) {
       ctx.beginPath();
       ctx.moveTo(0, i * cellSize);
@@ -74,7 +76,7 @@ Page({
       ctx.stroke();
     }
     
-    // Draw vertical lines
+    // Draw vertical lines (8 lines for 9 cells)
     for (let i = 0; i < 9; i++) {
       ctx.beginPath();
       ctx.moveTo(i * cellSize, 0);
@@ -130,15 +132,17 @@ Page({
     // Draw valid move indicators
     ctx.setFillStyle('rgba(0, 255, 0, 0.3)');
     validMoves.forEach(move => {
+      // Draw on intersections instead of cell centers
       ctx.beginPath();
-      ctx.arc(move[1] * cellSize + cellSize/2, move[0] * cellSize + cellSize/2, cellSize * 0.4, 0, 2 * Math.PI);
+      ctx.arc(move[1] * cellSize, move[0] * cellSize, cellSize * 0.4, 0, 2 * Math.PI);
       ctx.fill();
     });
     
     // Draw pieces
     pieces.forEach(piece => {
-      const x = piece.col * cellSize + cellSize/2;
-      const y = piece.row * cellSize + cellSize/2;
+      // Place pieces on intersections instead of cell centers
+      const x = piece.col * cellSize;
+      const y = piece.row * cellSize;
       const radius = cellSize * 0.4;
       
       // Draw piece background
@@ -155,7 +159,7 @@ Page({
       ctx.setFillStyle('#fff');
       ctx.setTextAlign('center');
       ctx.setTextBaseline('middle');
-      ctx.fillText(this.getPieceSymbol(piece.type), x, y);
+      ctx.fillText(this.getPieceSymbol(piece.type, piece.color), x, y);
       
       // Highlight selected piece
       if (selectedPiece && selectedPiece.row === piece.row && selectedPiece.col === piece.col) {
@@ -170,16 +174,30 @@ Page({
     ctx.draw(true);
   },
 
-  getPieceSymbol: function(type) {
-    switch (type) {
-      case 'general': return '将';
-      case 'advisor': return '士';
-      case 'elephant': return '象';
-      case 'horse': return '马';
-      case 'chariot': return '车';
-      case 'cannon': return '炮';
-      case 'soldier': return '卒';
-      default: return '';
+  getPieceSymbol: function(type, color) {
+    // Use traditional Chinese characters with different characters for red and black
+    if (color === 'red') {
+      switch (type) {
+        case 'general': return '帥';
+        case 'advisor': return '仕';
+        case 'elephant': return '相';
+        case 'horse': return '傌';
+        case 'chariot': return '俥';
+        case 'cannon': return '炮';
+        case 'soldier': return '兵';
+        default: return '';
+      }
+    } else {
+      switch (type) {
+        case 'general': return '將';
+        case 'advisor': return '士';
+        case 'elephant': return '象';
+        case 'horse': return '馬';
+        case 'chariot': return '車';
+        case 'cannon': return '砲';
+        case 'soldier': return '卒';
+        default: return '';
+      }
     }
   },
 
@@ -196,16 +214,22 @@ Page({
     const touch = e.touches[0];
     const cellSize = this.data.cellSize;
     
-    // Convert touch coordinates to board position
-    const col = Math.floor(touch.x / cellSize);
-    const row = Math.floor(touch.y / cellSize);
+    // Convert touch coordinates to nearest intersection
+    // Find the closest intersection point
+    const col = Math.round(touch.x / cellSize);
+    const row = Math.round(touch.y / cellSize);
+    
+    // Ensure coordinates are within board boundaries
+    if (col < 0 || col > 8 || row < 0 || row > 9) {
+      return;
+    }
     
     // If a piece is already selected
     if (this.data.selectedPiece) {
       const fromRow = this.data.selectedPiece.row;
       const fromCol = this.data.selectedPiece.col;
       
-      // Check if the touched cell is a valid move
+      // Check if the touched intersection is a valid move
       const isValidMove = this.data.validMoves.some(move => move[0] === row && move[1] === col);
       
       if (isValidMove) {

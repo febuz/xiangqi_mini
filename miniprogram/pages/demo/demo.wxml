@@ -1,0 +1,20 @@
+// Demo page for intersection-based rendering
+<view class="container">
+  <view class="header">
+    <text class="title">Xiangqi Intersection Rendering Demo</text>
+  </view>
+  
+  <view class="description">
+    <text>This demo shows the traditional Xiangqi board with pieces placed on intersections rather than in squares.</text>
+  </view>
+  
+  <view class="board-container">
+    <canvas canvas-id="demoCanvas" class="board"></canvas>
+  </view>
+  
+  <view class="controls">
+    <button bindtap="showInitialPosition" type="primary">Show Initial Position</button>
+    <button bindtap="playDemoMoves" type="default">Play Demo Moves</button>
+    <button bindtap="goBack" type="default">Back to Game</button>
+  </view>
+</view>

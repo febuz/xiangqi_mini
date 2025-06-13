@@ -1,7 +1,8 @@
 {
   "pages": [
     "pages/index/index",
-    "pages/lobby/lobby"
+    "pages/lobby/lobby",
+    "pages/demo/demo"
   ],
   "window": {
     "backgroundTextStyle": "light",
