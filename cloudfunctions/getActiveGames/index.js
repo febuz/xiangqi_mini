@@ -1,49 +1,40 @@
-// index.js for getActiveGames cloud function
-const cloud = require('wx-server-sdk');
+// Cloud function for getting active multiplayer games
+// This function retrieves all active multiplayer games that are open for joining
 
-cloud.init({
-  env: cloud.DYNAMIC_CURRENT_ENV
-});
-
-const db = cloud.database();
-const activeGamesCollection = db.collection('active_games');
-
-// Main function to get active multiplayer games
+// Main function handler
 exports.main = async (event, context) => {
   try {
     const wxContext = cloud.getWXContext();
-    const playerId = wxContext.OPENID;
+    const db = cloud.database();
+    const _ = db.command;
     
-    // Get all active games with status 'waiting'
-    const activeGames = await activeGamesCollection
-      .where({
-        status: 'waiting'
-      })
-      .orderBy('created_at', 'desc')
-      .get();
+    // Get all active games that are waiting for a second player
+    const gamesCollection = db.collection('games');
+    const result = await gamesCollection.where({
+      multiplayer: true,
+      'players.black.id': null, // Black player slot is empty
+      game_over: false
+    }).get();
     
     // Format the response
-    const games = activeGames.data.map(game => {
+    const activeGames = result.data.map(game => {
       return {
-        id: game.game_id,
-        creator: game.creator.name,
-        createdAt: game.created_at,
-        // Don't show join button for own games
-        isOwnGame: game.creator.id === playerId
+        game_id: game._id,
+        creator: game.players.red.name || 'Unknown Player',
+        created_at: game.created_at,
+        moves_count: game.moves ? game.moves.length : 0
       };
     });
     
     return {
       success: true,
-      games: games
+      games: activeGames
     };
   } catch (error) {
     console.error('Error getting active games:', error);
     return {
       success: false,
-      message: 'Error getting active games',
-      error: error.message,
-      games: []
+      error: error.message
     };
   }
 };
